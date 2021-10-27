@@ -1,3 +1,2 @@
-# Streamlabs-Chatbot-Python-Boilerplate
+# Streamlabs-Chatbot-All Or Nothing!
 
-Information on the Python Scripting Structure for the Streamlabs Chatbot can be located on github Wiki above.# streamlabs_chatbot_trivia
