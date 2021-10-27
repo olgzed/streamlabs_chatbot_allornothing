@@ -24,7 +24,7 @@
       },
     "Cooldown": {
       "type": "slider",
-      "value": 4,
+      "value": 0,
       "min": 1,
       "max": 100,
       "ticks": 1,
@@ -34,9 +34,9 @@
     },
     "Response": {
         "type": "textbox",
-        "value": "Pong!",
+        "value": "That's a good answer. Have a cookie.",
         "label": "Command",
-        "tooltip": "The message that will be sent to chat when using the command.",
+        "tooltip": "The message that will be sent to chat when answer is correct.",
         "group": "Core"
       }
   }

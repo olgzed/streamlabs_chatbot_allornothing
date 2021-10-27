@@ -4,6 +4,8 @@
 import os
 import sys
 import json
+import random
+from random import randint 
 sys.path.append(os.path.join(os.path.dirname(__file__), "lib")) #point at lib folder for classes / references
 
 import clr
@@ -15,10 +17,10 @@ from Settings_Module import MySettings
 #---------------------------
 #   [Required] Script Information
 #---------------------------
-ScriptName = "Template Script"
+ScriptName = "All or nothing"
 Website = "https://www.streamlabs.com"
-Description = "!test will post a message in chat"
-Creator = "AnkhHeart"
+Description = "!allornothing"
+Creator = "Olga"
 Version = "1.0.0.0"
 
 #---------------------------
@@ -28,7 +30,6 @@ global SettingsFile
 SettingsFile = ""
 global ScriptSettings
 ScriptSettings = MySettings()
-
 #---------------------------
 #   [Required] Initialize Data (Only called on load)
 #---------------------------
@@ -48,19 +49,31 @@ def Init():
 #---------------------------
 #   [Required] Execute Data / Process messages
 #---------------------------
+
 def Execute(data):
-    if data.IsChatMessage() and data.GetParam(0).lower() == ScriptSettings.Command and Parent.IsOnUserCooldown(ScriptName,ScriptSettings.Command,data.User):
-        Parent.SendStreamMessage("Time Remaining " + str(Parent.GetUserCooldownDuration(ScriptName,ScriptSettings.Command,data.User)))
-
     #   Check if the propper command is used, the command is not on cooldown and the user has permission to use the command
-    if data.IsChatMessage() and data.GetParam(0).lower() == ScriptSettings.Command and not Parent.IsOnUserCooldown(ScriptName,ScriptSettings.Command,data.User) and Parent.HasPermission(data.User,ScriptSettings.Permission,ScriptSettings.Info):
+    if '!allornothing' in data.Message and not Parent.IsOnUserCooldown(ScriptName,ScriptSettings.Command,data.User) and Parent.HasPermission(data.User,ScriptSettings.Permission,ScriptSettings.Info):
         Parent.BroadcastWsEvent("EVENT_MINE","{'show':false}")
-        Parent.SendStreamMessage(ScriptSettings.Response)    # Send your message to chat
-        Parent.AddUserCooldown(ScriptName,ScriptSettings.Command,data.User,ScriptSettings.Cooldown)  # Put the command on cooldown
+        winningCondition = random.randint(0,4) % 4 == 0
+        playersPoints = Parent.GetPoints(data.UserName)
 
-    
+        Parent.SendStreamMessage(str(winningCondition))
+        Parent.SendStreamMessage(str(playersPoints))
+        if winningCondition and Parent.GetPoints(data.UserName) >= 1:
+            reward = playersPoints * 2
+
+            Parent.AddPoints(data.User,data.UserName,reward)
+            Parent.SendStreamMessage('Well done, you get EVERYTHING')
+
+        elif Parent.GetPoints(data.UserName) < 1 :
+            Parent.SendStreamMessage('Sorry, you need at least 500 points to play')
+
+        elif winningCondition == False :
+            Parent.RemovePoints(data.User,data.UserName,playersPoints)
+            Parent.SendStreamMessage('Sorry you lose EVERYTHING')        
     return
 
+   
 #---------------------------
 #   [Required] Tick method (Gets called during every iteration even when there is no incoming data)
 #---------------------------

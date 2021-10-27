@@ -1,0 +1,12 @@
+User story
+23.10
+- have a command that triggers multiple choice question
+- have a command that triggers boolean type questiion (true/false)
+24.10
+- randomize potential answers and assign letters to each
+
+25.10
+- when you pick a it checks if answer a is correct
+
+26.10
+-fixed adding points and long answers
